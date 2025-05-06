@@ -40,12 +40,19 @@ async def on_ready():
     chat_channel = bot.get_channel(CHAT_CHANNEL_ID)
     if chat_channel:
         await chat_channel.send("영이 봇 2.0ver 준비 완료! 뭐든 시켜줘")
-    if not event_announce.is_running():
+
+    # 루프 중복 방지 플래그 체크 및 실행
+    if not loop_flags["event"]:
         event_announce.start()
-    if not weekend_message.is_running():
+        loop_flags["event"] = True
+
+    if not loop_flags["weekend"]:
         weekend_message.start()
-    if not sunday_night_message.is_running():
+        loop_flags["weekend"] = True
+
+    if not loop_flags["sunday"]:
         sunday_night_message.start()
+        loop_flags["sunday"] = True
 
 # 역할 버튼
 class RoleView(View):
